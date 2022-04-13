@@ -1,6 +1,12 @@
 # Jetbrains, Pycharm, Dataspell
 .idea
 
+# secrets
+*.token
+*.secret
+secrets.json
+# condier .sercrets or .config?
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
