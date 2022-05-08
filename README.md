@@ -5,6 +5,11 @@ Latest working session
 
 https://www.notion.so/lavrovs/Coding-Session-4-05-22-5ed502aa8a1f465e8533118488cc14f6
 
+---
+
+Notion SDK:
+https://github.com/ramnes/notion-sdk-py
+
 # Notion assistant
 
 Bot: https://t.me/CalmJarvisBot
