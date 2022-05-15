@@ -1,5 +1,5 @@
 import pytest
-from parse import parse_command
+from jarvis_command_parser import parse_command
 
 
 class TestParseCommand:
