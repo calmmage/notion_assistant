@@ -35,3 +35,8 @@ def parse_command(full_command):
                 output['tags'][f'{tagparts[0]}'] = tagparts[1].rstrip()
 
     return output
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
