@@ -9,13 +9,17 @@ def parse_command(full_command):
     {'command': '/idea', 'text': 'Test jarvis', 'tags': {'link': 'Notion Assistant', 'blue': None, 'important': None}}
 
     2. Text only
-    TODO
+    >>> parse_command('Just text with tags #link Notion Assistant #blue #important')
+    {'command': None, 'text': 'Just text with tags', 'tags': {'link': 'Notion Assistant', 'blue': None, 'important': None}}
     """
     output = {}
 
     # parse command
-    command, full_command = full_command.split(' ', 1)
-    output['command'] = command.rstrip()
+    if full_command.startswith('/'):
+        command, full_command = full_command.split(' ', 1)
+        output['command'] = command.rstrip()
+    else:
+        output['command'] = None
 
     # parse text
     if '#' not in full_command:
