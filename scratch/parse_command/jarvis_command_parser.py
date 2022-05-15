@@ -16,21 +16,22 @@ def parse_command(full_command):
 
     # parse command
     if full_command.startswith('/'):
-        command, full_command = full_command.split(' ', 1)
+        command, message = full_command.split(' ', 1)
         output['command'] = command.rstrip()
     else:
+        message = full_command
         output['command'] = None
 
     # parse text
-    if '#' not in full_command:
-        output['text'] = full_command.rstrip()
+    if '#' not in message:
+        output['text'] = message.rstrip()
     else:
-        text, full_command = full_command.split('#', 1)
+        text, message = message.split('#', 1)
         output['text'] = text.rstrip()
 
         # parse tags
         output['tags'] = {}
-        tags = full_command.split('#')
+        tags = message.split('#')
         for tag in tags:
             tagparts = tag.split(' ', 1)
             if len(tagparts) == 1 or len(tagparts[1]) == 0:
