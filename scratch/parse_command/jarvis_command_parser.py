@@ -1,5 +1,16 @@
 
 def parse_command(full_command):
+    """
+    Parse telegram command format for Jarvis
+
+    Examples:
+    1. Simple command example:
+    >>> parse_command('/idea Test jarvis #link Notion Assistant #blue #important')
+    {'command': '/idea', 'text': 'Test jarvis', 'tags': {'link': 'Notion Assistant', 'blue': None, 'important': None}}
+
+    2. Text only
+    TODO
+    """
     output = {}
 
     # parse command
