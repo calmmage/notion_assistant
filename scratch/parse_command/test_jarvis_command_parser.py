@@ -13,7 +13,7 @@ class TestParseCommand:
 
     def test_no_tags(self):
         output = parse_command('/idea Test jarvis ')
-        correct_output = {'command': '/idea', 'text': 'Test jarvis'}
+        correct_output = {'command': '/idea', 'tags': {}, 'text': 'Test jarvis'}
 
         assert output == correct_output
 

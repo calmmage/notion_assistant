@@ -22,22 +22,12 @@ def parse_command(full_command):
         message = full_command
         output['command'] = None
 
-    # parse text
-    if '#' not in message:
-        output['text'] = message.rstrip()
-    else:
-        text, message = message.split('#', 1)
-        output['text'] = text.rstrip()
 
-        # parse tags
-        output['tags'] = {}
-        tags = message.split('#')
-        for tag in tags:
-            tagparts = tag.split(' ', 1)
-            if len(tagparts) == 1 or len(tagparts[1]) == 0:
-                output['tags'][f'{tagparts[0]}'] = None
-            else:
-                output['tags'][f'{tagparts[0]}'] = tagparts[1].rstrip()
+    text, *tags = message.split('#')
+    output['text'] = text.strip()
+    tags = [[part.rstrip() for part in tag.split(None, 1)] for tag in tags]
+    output['tags'] = dict([(tag + [None] if len(tag) == 1 else tag) for tag in tags])
+    # parse text
 
     return output
 
