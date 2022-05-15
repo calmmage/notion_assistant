@@ -22,3 +22,21 @@ class TestParseCommand:
         correct_output = {'command': '/idea', 'text': 'Test jarvis', 'tags': {'blue': None}}
 
         assert output == correct_output
+
+    def test_multiline_command(self):
+        output = parse_command('/idea\nTest jarvis #blue')
+        correct_output = {'command': '/idea', 'text': 'Test jarvis', 'tags': {'blue': None}}
+
+        assert output == correct_output
+
+    def test_multiline_command_with_content(self):
+        output = parse_command('/idea\nCommand title\nCommand text #blue')
+        correct_output = {'command': '/idea', 'text': 'Command title', 'content': 'Command text', 'tags': {'blue': None}}
+
+        assert output == correct_output
+
+    def test_multiline_command_with_content_newline_tag(self):
+        output = parse_command('/idea\nCommand title\nCommand text\n#blue')
+        correct_output = {'command': '/idea', 'text': 'Command title', 'content': 'Command text', 'tags': {'blue': None}}
+
+        assert output == correct_output

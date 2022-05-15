@@ -16,7 +16,7 @@ def parse_command(full_command):
 
     # parse command
     if full_command.startswith('/'):
-        command, message = full_command.split(' ', 1)
+        command, message = full_command.split(None, 1)
         output['command'] = command.rstrip()
     else:
         message = full_command
@@ -24,10 +24,23 @@ def parse_command(full_command):
 
 
     text, *tags = message.split('#')
-    output['text'] = text.strip()
+
+    # parse text
+    text = text.strip()
+    if '\n' in text.strip():
+        # text with content, for example in
+        # /idea Make tests
+        # So that everything is tested
+        # #Important
+        text, content = text.split('\n', 1)
+        output['text'] = text
+        output['content'] = content
+    else:
+        output['text'] = text
+
+    # parse tags
     tags = [[part.rstrip() for part in tag.split(None, 1)] for tag in tags]
     output['tags'] = dict([(tag + [None] if len(tag) == 1 else tag) for tag in tags])
-    # parse text
 
     return output
 
