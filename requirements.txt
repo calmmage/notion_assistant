@@ -1,0 +1,4 @@
+python-telegram-bot
+requests
+git+https://github.com/calmquant/calmlib@master#egg=calmlib
+git+https://github.com/ramnes/notion-sdk-py@master#egg=notion_client
