@@ -1,5 +1,6 @@
 from .jarvis_telegram_message_parser import telegram_command_to_text
 
+
 def parse_command(full_command: str) -> dict:
     """
     Parse telegram command format for Jarvis
