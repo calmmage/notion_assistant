@@ -1,4 +1,3 @@
-
 def parse_command(full_command: str) -> dict:
     """
     Parse telegram command format for Jarvis
@@ -21,7 +20,6 @@ def parse_command(full_command: str) -> dict:
     else:
         message = full_command
         output['command'] = None
-
 
     text, *tags = message.split('#')
 
@@ -47,4 +45,5 @@ def parse_command(full_command: str) -> dict:
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
