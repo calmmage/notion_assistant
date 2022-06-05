@@ -1,5 +1,6 @@
+from .jarvis_telegram_message_parser import telegram_command_to_text
 
-def parse_command(full_command):
+def parse_command(full_command: str) -> dict:
     """
     Parse telegram command format for Jarvis
 
@@ -45,6 +46,13 @@ def parse_command(full_command):
     return output
 
 
+@telegram_command_to_text
+def parse_tg_command(command: str) -> dict:
+    return parse_command(command)
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+    parse_tg_command('/idea Test jarvis #link Notion Assistant #blue #important')
