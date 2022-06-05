@@ -1,5 +1,6 @@
 import os
 import enum
+import re
 from notion_client import Client
 
 
@@ -21,20 +22,9 @@ def get_enums_from_db(notion_client: Client, db_id: str) -> dict:
 
     return cols_and_enums
 
-resp = {'S_Status': ['Cancelled', 'Done', 'In progress', 'Focus', 'Todo'],
-        'S_Priority': ['1 - Lowest',
-                       '2 - Low',
-                       '3 - Medium',
-                       '4 - High',
-                       '5 - Highest'],
-        'C_Type': ['Disposable', 'Idea', 'Todo', 'Context/Project', 'App/Process'],
-        'S_Area': ['Home',
-                   'Work',
-                   'Wellbeing',
-                   'For Others',
-                   'Meta',
-                   'Life',
-                   'Unclear']}
+
+def change_all_nonletters_to_underscores(data: str) -> str:
+    return re.sub('[^0-9a-zA-Z]+', '_', data)
 
 
 class S_Status(enum.Enum):
@@ -56,6 +46,7 @@ class S_Priority(enum.Enum):
 class C_Type(enum.Enum):
     Disposable = 'Disposable'
     Idea = 'Idea'
+    Todo = 'Todo'
     Context_Project = 'Context/Project'
     App_Process = 'App/Process'
 
