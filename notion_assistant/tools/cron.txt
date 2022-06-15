@@ -1,0 +1,1 @@
+0 * * * * notion_assistant/tools/startup.sh >>log.txt 2>>&1
