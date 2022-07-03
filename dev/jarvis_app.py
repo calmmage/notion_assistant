@@ -4,6 +4,7 @@ from defaultenv import env
 # env("JARVIS_TELEGRAM_TOKEN")
 from scratch.NA_mvp import extract_database_id
 import notion_client as notion
+import logging
 
 TASKS_DATABASE = 'https://www.notion.so/lavrovs/d96416324b44433a9d378f0767627301?v=877e567e513a4583b9e4614d1b059ba1'
 TASKS_DB_ID = extract_database_id(TASKS_DATABASE)
@@ -22,11 +23,15 @@ def jarvis_app():
     # 3) Do something - add task handler
 
     # 1) connect Notion
+    logging.info('Creating notion client...')
     notion_client = notion.Client(auth=env("JARVIS_NOTION_TOKEN"))
+    logging.info('Created notion client')
 
     # 2) connect Telegram
     import telegram.ext
+    logging.info('Creating telegram client...')
     telegram_updater = telegram.ext.Updater(env("JARVIS_TELEGRAM_TOKEN"))
+    logging.info('Created telegram client')
 
     # 3) add message handler
 
@@ -48,6 +53,7 @@ def jarvis_app():
             :param tags:
             :return:
             """
+            logging.info('Starting telegram client...')
             pars = {"parent": {"database_id": TASKS_DB_ID},
                     "properties": {
                         "Name": {
@@ -138,18 +144,23 @@ def jarvis_app():
 
     # %%
     # 4) launch
+    logging.info('Launching notion client...')
     nc = NotionClient(token=env("JARVIS_NOTION_TOKEN"))
+    logging.info('Launched notion client...')
 
     dispatcher = telegram_updater.dispatcher
     dispatcher.add_handler(telegram.ext.CommandHandler("add_task",
                                                        notion_decorator(nc.add_task)))
+    logging.info('Added telegram task handler...')
 
     # Start the Bot
+    logging.info('Telegram bot is starting...')
     telegram_updater.start_polling()
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
+    logging.info('Telegram bot started')
     telegram_updater.idle()
 
 
