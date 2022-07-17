@@ -4,6 +4,7 @@ from defaultenv import env
 # env("JARVIS_TELEGRAM_TOKEN")
 from scratch.NA_mvp import extract_database_id
 import notion_client as notion
+import logging
 
 TASKS_DATABASE = 'https://www.notion.so/lavrovs/d96416324b44433a9d378f0767627301?v=877e567e513a4583b9e4614d1b059ba1'
 TASKS_DB_ID = extract_database_id(TASKS_DATABASE)
@@ -28,11 +29,13 @@ def jarvis_app():
                                                        notion_decorator(notion_client.add_task)))
 
     # Start the Bot
+    logging.info('Telegram bot is starting...')
     telegram_updater.start_polling()
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
+    logging.info('Telegram bot started')
     telegram_updater.idle()
 
 
