@@ -1,6 +1,6 @@
-import os
 import enum
 import re
+
 from notion_client import Client
 
 
@@ -17,7 +17,8 @@ def get_enums_from_db(notion_client: Client, db_id: str) -> dict:
         if response['properties'][db_column]['type'] != 'select':
             continue
 
-        this_column_enums = [opt['name'] for opt in response['properties'][db_column]['select']['options']]
+        this_column_enums = [opt['name'] for opt in
+                             response['properties'][db_column]['select']['options']]
         cols_and_enums[db_column] = this_column_enums
 
     return cols_and_enums
@@ -59,4 +60,3 @@ class S_Area(enum.Enum):
     Meta = 'Meta'
     Life = 'Life',
     Unclear = 'Unclear'
-

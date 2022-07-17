@@ -1,5 +1,5 @@
-from logging import StreamHandler, FileHandler
 import logging
+from logging import StreamHandler, FileHandler
 
 from notion_client import Client
 
