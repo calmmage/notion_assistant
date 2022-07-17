@@ -1,10 +1,10 @@
+import logging
+
 from defaultenv import env
 # usage:
 # env("JARVIS_NOTION_TOKEN")
 # env("JARVIS_TELEGRAM_TOKEN")
 from scratch.NA_mvp import extract_database_id
-import notion_client as notion
-import logging
 
 TASKS_DATABASE = 'https://www.notion.so/lavrovs/d96416324b44433a9d378f0767627301?v=877e567e513a4583b9e4614d1b059ba1'
 TASKS_DB_ID = extract_database_id(TASKS_DATABASE)
@@ -18,7 +18,8 @@ TASKS_DB_ID = extract_database_id(TASKS_DATABASE)
 # secrets = json.load(secrets_path.open())
 
 def jarvis_app():
-    from jarvis_lib import NotionClient, notion_decorator, telegram_updater
+    from jarvis_lib import NotionClient, telegram_updater
+    from notion_assistant.javris.temp import notion_decorator
     import telegram.ext
     # %%
     # 4) launch
