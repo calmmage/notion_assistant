@@ -21,5 +21,8 @@ setup(name='Notion Assistant',
       url='https://github.com/calmquant/notion_assistant',
       packages=['notion_assistant'],
       long_description=Path('README.md').read_text(),
-      install_requires=Path('requirements.txt').read_text().split()
+      install_requires=[req for req in
+                        Path('requirements.txt').read_text().split()
+                        if not req.startswith('git')
+                        ]
       )
