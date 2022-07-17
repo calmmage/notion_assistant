@@ -1,1 +1,1 @@
-from NA_mvp import *
+from .NA_mvp import *
