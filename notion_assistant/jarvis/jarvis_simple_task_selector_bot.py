@@ -1,6 +1,7 @@
 from notion_assistant.jarvis import config
 from notion_assistant.jarvis.jarvis import Jarvis
 from notion_assistant.jarvis.telegram_client import TelegramClient
+from notion_assistant.logs import LOGGER
 
 
 class JarvisSimpleTaskSelectorBot:
@@ -11,6 +12,7 @@ class JarvisSimpleTaskSelectorBot:
         self.telegram_client = TelegramClient(config.telegram_sts_token)
 
     def run(self):
+        LOGGER.info(f"Launching {self.__class__.__name__}")
         # register telegram handlers
         # todo: find notebook - http://localhost:8888/notebooks/notion_assistant/dev/Simple%20task%20selector.ipynb
         # - start: do what is necessary to init: 1) fix notion db. check it's valid 2) select first task

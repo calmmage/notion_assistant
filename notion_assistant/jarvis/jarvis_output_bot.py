@@ -8,6 +8,7 @@ from notion_assistant.jarvis.jarvis import Jarvis
 from notion_assistant.jarvis.telegram_client import TelegramClient
 # example: daily agenda.
 from notion_assistant.jarvis.temp import telegram_decorator
+from notion_assistant.logs import LOGGER
 
 
 def telegram_command(commands: List[str]):
@@ -17,10 +18,13 @@ def telegram_command(commands: List[str]):
     def wrapper(func):
         # add func to registry
         for command in commands:
-            JarvisOutputBot.commands[command] = func.__name__
+            telegram_command.registry[command] = func.__name__
         return func
 
     return wrapper
+
+
+telegram_command.registry = dict()
 
 
 class JarvisOutputBot:
@@ -45,6 +49,7 @@ class JarvisOutputBot:
         return "https://www.notion.so/lavrovs/Daily-Plans-fbb2c8966f1c47ebb257eb2b34ba30c2"
 
     def run(self):
+        LOGGER.info(f"Launching {self.__class__.__name__}")
         # register telegram handlers
         # - none for now. ? Or do 'diary' and other app lookup here instead of input?
 
@@ -54,9 +59,10 @@ class JarvisOutputBot:
 
         # todo: auto-cleanup old messages / clutter
 
-        for command, func_name in self.commands.items():
+        for command, func_name in telegram_command.registry.items():
             func = self.__getattribute__(func_name)
-            func = telegram_decorator(func)  # todo: rename to parse_telegram_command_decorator @akudrinskiy
+            func = telegram_decorator(
+                func)  # todo: rename to parse_telegram_command_decorator @akudrinskiy
             self.telegram_client.add_handler(command, func)
 
         # launch telegram bot
