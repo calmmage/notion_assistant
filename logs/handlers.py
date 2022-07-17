@@ -50,13 +50,9 @@ class NotionLoggingHandler(StreamHandler):
     def _parse_message_to_page(record: logging.LogRecord):
         return {
                 "level": {
-                    "title": [
-                        {
-                            "text": {
-                                "content": record.levelname,
-                            },
-                        },
-                    ],
+                    "select": {
+                        "name": record.levelname,
+                    }
                 },
                 "message": {
                     "title": [
