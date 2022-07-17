@@ -2,3 +2,4 @@ python-telegram-bot
 requests
 git+https://github.com/ramnes/notion-sdk-py@main#egg=notion_client
 git+https://github.com/calmquant/calmlib@master#egg=calmlib
+git+https://github.com/bobuk/defaultenv@master#egg=defaultenv
