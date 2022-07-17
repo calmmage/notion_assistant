@@ -1,13 +1,13 @@
 # jarvis output bot
 from typing import List
 
-import config
-from jarvis import Jarvis
+from notion_assistant.jarvis import config
+from notion_assistant.jarvis.jarvis import Jarvis
 # example: links for quick access relevant at this time of day (e.g. Siri)
 # auto-cleanup all other clutter messages
-from notion_assistant.javris.telegram_client import TelegramClient
+from notion_assistant.jarvis.telegram_client import TelegramClient
 # example: daily agenda.
-from notion_assistant.javris.temp import telegram_decorator
+from notion_assistant.jarvis.temp import telegram_decorator
 
 
 def telegram_command(commands: List[str]):

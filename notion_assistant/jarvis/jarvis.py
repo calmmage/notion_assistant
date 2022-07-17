@@ -1,8 +1,8 @@
 # jarvis.py
 from time import sleep
 
-import config
-from notion_assistant.javris.notion_client import NotionClient
+from notion_assistant.jarvis import config
+from notion_assistant.jarvis.enhanced_notion_client import EnhancedNotionClient
 
 
 class Jarvis:
@@ -10,7 +10,7 @@ class Jarvis:
 
     def __init__(self):
         # connect to Notion
-        self.notion_client = NotionClient(config.notion_token)
+        self.notion_client = EnhancedNotionClient(config.notion_token)
         self.launched = False
 
     def run(self):

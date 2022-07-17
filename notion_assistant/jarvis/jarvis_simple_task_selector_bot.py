@@ -1,6 +1,6 @@
-import config
-from jarvis import Jarvis
-from notion_assistant.javris.telegram_client import TelegramClient
+from notion_assistant.jarvis import config
+from notion_assistant.jarvis.jarvis import Jarvis
+from notion_assistant.jarvis.telegram_client import TelegramClient
 
 
 class JarvisSimpleTaskSelectorBot:

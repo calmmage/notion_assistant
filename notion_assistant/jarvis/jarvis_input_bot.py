@@ -4,11 +4,11 @@
 
 from typing import List, Optional
 
-import config
-from jarvis import Jarvis
-from notion_assistant.javris.notion_client import NotionDB
-from notion_assistant.javris.telegram_client import TelegramClient
-from notion_assistant.javris.temp import notion_decorator, compose_item
+from notion_assistant.jarvis import config
+from notion_assistant.jarvis.enhanced_notion_client import NotionDB
+from notion_assistant.jarvis.jarvis import Jarvis
+from notion_assistant.jarvis.telegram_client import TelegramClient
+from notion_assistant.jarvis.temp import notion_decorator, compose_item
 from notion_assistant.logs import LOGGER
 from notion_assistant.notion_db_enums.db_anchor_enums import C_Type
 
