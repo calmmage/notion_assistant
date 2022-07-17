@@ -9,4 +9,4 @@ logging.basicConfig(level=logging.NOTSET)
 with open('secrets.json') as secrets_file:
     secrets  = json.load(secrets_file)
 
-setup_logger(secrets)
+LOGGER = setup_logger(secrets)
