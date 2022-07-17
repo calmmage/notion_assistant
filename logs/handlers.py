@@ -19,7 +19,7 @@ class NotionLoggingHandler(StreamHandler):
 
 
     def _log_parsing_result(self, record: logging.LogRecord):
-        self.client.pages.create(
+        self.notion_client.pages.create(
             parent={"database_id": self.notion_database_id},
             properties=NotionLoggingHandler._parse_message_to_page(record),
             children=[
@@ -41,7 +41,7 @@ class NotionLoggingHandler(StreamHandler):
         )
 
     def _log_ordinary_result(self, record: logging.LogRecord):
-        self.client.pages.create(
+        self.notion_client.pages.create(
             parent={"database_id": self.notion_database_id},
             properties=NotionLoggingHandler._parse_message_to_page(record)
         )
@@ -53,7 +53,7 @@ class NotionLoggingHandler(StreamHandler):
                     "title": [
                         {
                             "text": {
-                                "content": record.level,
+                                "content": record.levelname,
                             },
                         },
                     ],
