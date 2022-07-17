@@ -1,5 +1,5 @@
 import logging
-from handlers import get_all_log_handlers
+from .handlers import get_all_log_handlers
 
 
 def setup_logger(secrets) -> logging.Logger:
