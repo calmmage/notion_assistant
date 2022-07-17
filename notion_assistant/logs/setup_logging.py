@@ -10,6 +10,6 @@ def setup_logger(secrets) -> logging.Logger:
 
     handlers = get_all_log_handlers(secrets['notion_log_db_id'], secrets['notion_token'])
     for handler in handlers:
-        logger.addHandler(handler) # TODO: adding directly to root loggger may be unsafe?
+        logger.addHandler(handler)  # TODO: adding directly to root loggger may be unsafe?
 
     return logger

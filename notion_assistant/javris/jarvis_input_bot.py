@@ -5,12 +5,12 @@
 from typing import List, Optional
 
 import config
-from dev.notion_db_enums.db_anchor_enums import C_Type
 from jarvis import Jarvis
-from logs import LOGGER
 from notion_assistant.javris.notion_client import NotionDB
 from notion_assistant.javris.telegram_client import TelegramClient
 from notion_assistant.javris.temp import notion_decorator, compose_item
+from notion_assistant.logs import LOGGER
+from notion_assistant.notion_db_enums.db_anchor_enums import C_Type
 
 
 def generator(commands: List[str]):
@@ -75,7 +75,7 @@ class JarvisInputBot:
             # todo: mark page as unsorted - for future processing
             target_db = self.db_todos
 
-        res = target_db.add(item)
+        res = target_db.add_item(item)
         # todo: add logging
         # todo: use telegram formatted links instead of text links
         return f"Page added successfully. Address: {res}"  # reply to the user.
@@ -95,7 +95,8 @@ class JarvisInputBot:
     def tag_metadata(item, value, column=None):
         """
         Add metadata to the Notion item json representation
-        :param value:
+        :param item: Notion nested json item to be modified
+        :param value: field value to be added to the specified column
         :param column: column to add value to
         if column is None - add as generic tag.
         :return:

@@ -58,7 +58,7 @@ class NotionDB(NotionObject):
     #     self.id = id
     #     self.client = client
 
-    def add(self, item):
+    def add_item(self, item):
         # todo: verify item, patch if issues
         # todo: check that response is the page address
         return self.client.client.pages.create(parent={"database_id": self.id}, **item)

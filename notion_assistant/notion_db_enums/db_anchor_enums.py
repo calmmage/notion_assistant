@@ -5,11 +5,11 @@ from notion_client import Client
 
 
 def get_enums_from_db(notion_client: Client, db_id: str) -> dict:
-    ''' gets all enums in all columns of type "select" in a database
+    """ gets all enums in all columns of type "select" in a database
     :param notion_client: ready-to-use client
     :param db_id: id of a database
     :return: {'col1': ['enumvalue1', 'enumvalue2', ...], ...}
-    '''
+    """
     response = notion_client.databases.retrieve(db_id)
     cols_and_enums = {}
 
