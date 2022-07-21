@@ -1,8 +1,7 @@
 # jarvis output bot
 from typing import List
 
-from notion_assistant.jarvis import config
-from notion_assistant.jarvis.jarvis import Jarvis
+from notion_assistant.jarvis.config import jarvis_output_bot_config
 # example: links for quick access relevant at this time of day (e.g. Siri)
 # auto-cleanup all other clutter messages
 from notion_assistant.jarvis.telegram_client import TelegramClient
@@ -36,7 +35,7 @@ class JarvisOutputBot:
         self.jarvis = jarvis
         self.notion_client = jarvis.notion_client
 
-        self.telegram_client = TelegramClient(config.telegram_sts_token)
+        self.telegram_client = TelegramClient(jarvis_output_bot_config.telegram_token)
 
     @telegram_command(['daily_diary', 'diary'])
     def get_daily_diary(self):
@@ -63,10 +62,10 @@ class JarvisOutputBot:
             func = self.__getattribute__(func_name)
             func = telegram_decorator(
                 func)  # todo: rename to parse_telegram_command_decorator @akudrinskiy
-            self.telegram_client.add_handler(command, func)
+            self.telegram_client.add_command_handler(command, func)
 
         # launch telegram bot
         self.telegram_client.run(blocking=False)
 
-
-Jarvis.registered_plugins.append(JarvisOutputBot)
+# Jarvis.registered_plugins.append(JarvisOutputBot)
+# this doesn't work :( Probably because of cache
