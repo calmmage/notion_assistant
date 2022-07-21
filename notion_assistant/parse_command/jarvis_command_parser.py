@@ -38,7 +38,10 @@ def parse_command(full_command: str) -> dict:
 
     # parse tags
     tags = [[part.rstrip() for part in tag.split(None, 1)] for tag in tags]
-    output['tags'] = dict([(tag + [None] if len(tag) == 1 else tag) for tag in tags])
+    output['tags'] = {
+        tag[0]: (None if len(tag) == 1 else tag[1])
+        for tag in tags
+    }
 
     return output
 

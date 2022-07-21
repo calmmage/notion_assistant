@@ -1,4 +1,3 @@
-import pytest
 from parse import parse_command
 
 

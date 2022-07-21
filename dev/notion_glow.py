@@ -11,10 +11,10 @@ And core item types
 
     - Working session
 """
-from notion_assistant.javris.notion_client import NotionClient
+from notion_assistant.jarvis.enhanced_notion_client import EnhancedNotionClient
 
 
-class GlowNotionClient(NotionClient):
+class GlowEnhancedNotionClient(EnhancedNotionClient):
 
     def find_page(self, query, context=None):
         pass

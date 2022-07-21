@@ -1,10 +1,12 @@
 import logging
-from functools import cached_property
 
 import notion_client
 
 
-class NotionClient:  # todo: make a factory, forbid duplication
+# from functools import cached_property
+
+
+class EnhancedNotionClient:  # todo: make a factory, forbid duplication
     def __init__(self, token):
         self.client = notion_client.Client(auth=token)
 
@@ -44,7 +46,7 @@ NOTION_LINK_TEMPLATE = "https://www.notion.so/{id}"
 
 
 class NotionObject:
-    def __init__(self, id, client: NotionClient):
+    def __init__(self, id, client: EnhancedNotionClient):
         self.id = id
         self.client = client
 
@@ -58,12 +60,12 @@ class NotionDB(NotionObject):
     #     self.id = id
     #     self.client = client
 
-    def add(self, item):
+    def add_item(self, item):
         # todo: verify item, patch if issues
         # todo: check that response is the page address
         return self.client.client.pages.create(parent={"database_id": self.id}, **item)
 
-    @cached_property  # todo: refresh cache from time to time?
+    @property  # todo: refresh cache from time to time?
     def metadata(self):
         return self.client.client.databases.retrieve(self.id)
 
@@ -77,6 +79,6 @@ class NotionPage(NotionObject):
     #     self.id = id
     #     self.client = client
 
-    @cached_property  # todo: just remove? requests are cheap
+    @property
     def metadata(self):
         return self.client.client.pages.retrieve(self.id)
