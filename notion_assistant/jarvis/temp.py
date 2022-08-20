@@ -56,23 +56,12 @@ def parse_command(full_command):
     return output
 
 
-def notion_decorator(func):
+def parse_telegram_command_decorator(func):
     # todo: add logging @akudrinskii
     @functools.wraps(func)
     def new_func(upd: Update, context: CallbackContext) -> None:
         parts = parse_command(upd.message.text)
         res = func(name=parts['name'], content=parts['content'], tags=parts['tags'])
-        if res:
-            upd.message.reply_text(res)
-
-    return new_func
-
-
-def telegram_decorator(func):
-    @functools.wraps(func)
-    def new_func(upd: Update, context: CallbackContext) -> None:
-        text = upd.message.text  # todo: add logging
-        res = func()
         if res:
             upd.message.reply_text(res)
 

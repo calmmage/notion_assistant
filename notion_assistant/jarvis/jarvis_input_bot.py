@@ -8,7 +8,7 @@ from notion_assistant.jarvis.config import jarvis_input_bot_config
 from notion_assistant.jarvis.enhanced_notion_client import NotionDB
 from notion_assistant.jarvis.jarvis import Jarvis
 from notion_assistant.jarvis.telegram_client import TelegramClient
-from notion_assistant.jarvis.temp import notion_decorator, compose_item
+from notion_assistant.jarvis.temp import parse_telegram_command_decorator, compose_item
 from notion_assistant.logs import LOGGER
 from notion_assistant.notion_db_enums.db_anchor_enums import C_Type
 
@@ -84,6 +84,7 @@ class JarvisInputBot:
         res = target_db.add_item(item)
         # todo: add logging
         # todo: use telegram formatted links instead of text links
+        LOGGER.info(f'Page {name} of type {core_type} was added to DB {target_db} at {res}')
         return f"Page added successfully. Address: {res}"  # reply to the user.
 
     @generator(['todo', 'task'])
@@ -127,7 +128,8 @@ class JarvisInputBot:
         raise NotImplemented("Specifying source is not implemented yet")
 
     def run(self):
-        LOGGER.info(f"Launching {self.__class__.__name__}")
+        pligin_name = self.__class__.__name__
+        LOGGER.info(f"Launching {pligin_name}")
         # register telegram handlers
         # - /task
         # - /idea
@@ -137,9 +139,9 @@ class JarvisInputBot:
 
         for generator_command, func_name in generator.registry.items():
             func = self.__getattribute__(func_name)
-            func = notion_decorator(
-                func)  # todo: rename to parse_telegram_command_decorator @akudrinskiy
+            func = parse_telegram_command_decorator(func)
             self.telegram_client.add_command_handler(generator_command, func)
+            LOGGER.info(f"Added handler <{func}> for command <{generator_command}> in plugin {pligin_name}")
 
         # todo p1: Add general text handler. Convert messages to commands and process accordingly
 
@@ -147,5 +149,6 @@ class JarvisInputBot:
 
         # launch telegram bot
         self.telegram_client.run(blocking=False)
+        LOGGER.info(f"Plugin {pligin_name} is running")
 
 # Jarvis.registered_plugins.append(JarvisInputBot)
