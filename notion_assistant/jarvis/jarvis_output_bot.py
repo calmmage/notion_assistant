@@ -7,7 +7,7 @@ from notion_assistant.jarvis.jarvis import Jarvis
 # auto-cleanup all other clutter messages
 from notion_assistant.jarvis.telegram_client import TelegramClient
 # example: daily agenda.
-from notion_assistant.jarvis.temp import telegram_decorator
+from notion_assistant.jarvis.temp import parse_telegram_command_decorator
 from notion_assistant.logs import LOGGER
 
 
@@ -49,7 +49,8 @@ class JarvisOutputBot:
         return "https://www.notion.so/lavrovs/Daily-Plans-fbb2c8966f1c47ebb257eb2b34ba30c2"
 
     def run(self):
-        LOGGER.info(f"Launching {self.__class__.__name__}")
+        pligin_name = self.__class__.__name__
+        LOGGER.info(f"Launching {pligin_name}")
         # register telegram handlers
         # - none for now. ? Or do 'diary' and other app lookup here instead of input?
 
@@ -61,12 +62,14 @@ class JarvisOutputBot:
 
         for command, func_name in telegram_command.registry.items():
             func = self.__getattribute__(func_name)
-            func = telegram_decorator(
-                func)  # todo: rename to parse_telegram_command_decorator @akudrinskiy
+            func = parse_telegram_command_decorator(
+                func)
             self.telegram_client.add_handler(command, func)
+            LOGGER.info(f"Added handler <{func}> for command <{command}>  in plugin {pligin_name}")
 
         # launch telegram bot
         self.telegram_client.run(blocking=False)
+        LOGGER.info(f"Plugin {pligin_name} is running")
 
 
 Jarvis.registered_plugins.append(JarvisOutputBot)
