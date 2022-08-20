@@ -39,12 +39,12 @@ class JarvisOutputBot:
         self.telegram_client = TelegramClient(config.telegram_sts_token)
 
     @telegram_command(['daily_diary', 'diary'])
-    def get_daily_diary(self):
+    def get_daily_diary(self, **kwargs):
         # todo: replace hardcode with config sourced from notion table
         return "https://www.notion.so/lavrovs/Daily-Diary-f13e3e2a11014da7b8d875d71b9d6b20"
 
     @telegram_command(['daily_plans', 'plans', 'schedule'])
-    def get_daily_plans(self):
+    def get_daily_plans(self, **kwargs):
         # todo: replace hardcode with config sourced from notion table
         return "https://www.notion.so/lavrovs/Daily-Plans-fbb2c8966f1c47ebb257eb2b34ba30c2"
 
@@ -62,8 +62,7 @@ class JarvisOutputBot:
 
         for command, func_name in telegram_command.registry.items():
             func = self.__getattribute__(func_name)
-            func = parse_telegram_command_decorator(
-                func)
+            func = parse_telegram_command_decorator(func)
             self.telegram_client.add_handler(command, func)
             LOGGER.info(f"Added handler <{func}> for command <{command}>  in plugin {pligin_name}")
 
