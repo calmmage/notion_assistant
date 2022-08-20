@@ -1,4 +1,9 @@
-from logs import LOGGER
+import functools
+
+from telegram import Update
+from telegram.ext import CallbackContext
+
+from notion_assistant.logs import LOGGER
 
 
 def parse_command(full_command):
@@ -43,14 +48,18 @@ def parse_command(full_command):
 
     # parse tags
     tags = [[part.rstrip() for part in tag.split(None, 1)] for tag in tags]
-    output['tags'] = dict([(tag + [None] if len(tag) == 1 else tag) for tag in tags])
+    output['tags'] = {
+        tag[0]: (None if len(tag) == 1 else tag[1])
+        for tag in tags
+    }
 
     return output
 
 
-def notion_decorator(func):
+def parse_telegram_command_decorator(func):
     # todo: add logging @akudrinskii
-    def new_func(upd, cont):
+    @functools.wraps(func)
+    def new_func(upd: Update, context: CallbackContext) -> None:
         parts = parse_command(upd.message.text)
         res = func(name=parts['name'], content=parts['content'], tags=parts['tags'])
         if res:
@@ -59,18 +68,7 @@ def notion_decorator(func):
     return new_func
 
 
-def telegram_decorator(func):
-    # todo: add logging @akudrinskii
-    def new_func(upd, cont):
-        text = upd.message.text
-        res = func()
-        if res:
-            upd.message.reply_text(res)
-
-    return new_func
-
-
-# supported generators registry
+# supported generators registry: (Types of items that can be composed)
 # todo: add. generic add
 # todo: all the
 def compose_block(content):

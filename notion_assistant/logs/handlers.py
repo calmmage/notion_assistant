@@ -9,14 +9,12 @@ class NotionLoggingHandler(StreamHandler):
         super().__init__()
         self.notion_client = Client(auth=notion_secret_key)
         self.notion_database_id = notion_database_id
-        
 
     def emit(self, record: logging.LogRecord):
         if 'logging_parsing_result' in record.args:
             self._log_parsing_result(record)
         else:
             self._log_ordinary_result(record)
-
 
     def _log_parsing_result(self, record: logging.LogRecord):
         self.notion_client.pages.create(
@@ -49,28 +47,29 @@ class NotionLoggingHandler(StreamHandler):
     @staticmethod
     def _parse_message_to_page(record: logging.LogRecord):
         return {
-                "level": {
-                    "select": {
-                        "name": record.levelname,
-                    }
-                },
-                "message": {
-                    "title": [
-                        {
-                            "text": {
-                                "content": record.getMessage(),
-                            },
+            "level": {
+                "select": {
+                    "name": record.levelname,
+                }
+            },
+            "message": {
+                "title": [
+                    {
+                        "text": {
+                            "content": record.getMessage(),
                         },
-                    ],
-                },
-            }
+                    },
+                ],
+            },
+        }
+
 
 def get_all_log_handlers(
         notion_database_id,
         notion_secret_key,
-        strfmt = '[%(asctime)s] [%(name)s] [%(levelname)s] > %(message)s',
-        datefmt = '%Y-%m-%d %H:%M:%S',
-        logfile_path = 'logs.txt',
+        strfmt='[%(asctime)s] [%(name)s] [%(levelname)s] > %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        logfile_path='logs.txt',
 ):
     formatter = logging.Formatter(fmt=strfmt, datefmt=datefmt)
 

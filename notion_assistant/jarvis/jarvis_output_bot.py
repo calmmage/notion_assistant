@@ -1,13 +1,13 @@
 # jarvis output bot
 from typing import List
 
-import config
-from jarvis import Jarvis
+from notion_assistant.jarvis.config import jarvis_output_bot_config
 # example: links for quick access relevant at this time of day (e.g. Siri)
 # auto-cleanup all other clutter messages
-from notion_assistant.javris.telegram_client import TelegramClient
+from notion_assistant.jarvis.telegram_client import TelegramClient
 # example: daily agenda.
-from notion_assistant.javris.temp import telegram_decorator
+from notion_assistant.jarvis.temp import parse_telegram_command_decorator
+from notion_assistant.logs import LOGGER
 
 
 def telegram_command(commands: List[str]):
@@ -17,10 +17,13 @@ def telegram_command(commands: List[str]):
     def wrapper(func):
         # add func to registry
         for command in commands:
-            JarvisOutputBot.commands[command] = func.__name__
+            telegram_command.registry[command] = func.__name__
         return func
 
     return wrapper
+
+
+telegram_command.registry = dict()
 
 
 class JarvisOutputBot:
@@ -32,19 +35,21 @@ class JarvisOutputBot:
         self.jarvis = jarvis
         self.notion_client = jarvis.notion_client
 
-        self.telegram_client = TelegramClient(config.telegram_sts_token)
+        self.telegram_client = TelegramClient(jarvis_output_bot_config.telegram_token)
 
     @telegram_command(['daily_diary', 'diary'])
-    def get_daily_diary(self):
+    def get_daily_diary(self, **kwargs):
         # todo: replace hardcode with config sourced from notion table
         return "https://www.notion.so/lavrovs/Daily-Diary-f13e3e2a11014da7b8d875d71b9d6b20"
 
     @telegram_command(['daily_plans', 'plans', 'schedule'])
-    def get_daily_plans(self):
+    def get_daily_plans(self, **kwargs):
         # todo: replace hardcode with config sourced from notion table
         return "https://www.notion.so/lavrovs/Daily-Plans-fbb2c8966f1c47ebb257eb2b34ba30c2"
 
     def run(self):
+        pligin_name = self.__class__.__name__
+        LOGGER.info(f"Launching {pligin_name}")
         # register telegram handlers
         # - none for now. ? Or do 'diary' and other app lookup here instead of input?
 
@@ -54,13 +59,15 @@ class JarvisOutputBot:
 
         # todo: auto-cleanup old messages / clutter
 
-        for command, func_name in self.commands.items():
+        for command, func_name in telegram_command.registry.items():
             func = self.__getattribute__(func_name)
-            func = telegram_decorator(func)  # todo: rename to parse_telegram_command_decorator @akudrinskiy
-            self.telegram_client.add_handler(command, func)
+            func = parse_telegram_command_decorator(func)
+            self.telegram_client.add_command_handler(command, func)
+            LOGGER.info(f"Added handler <{func}> for command <{command}>  in plugin {pligin_name}")
 
         # launch telegram bot
         self.telegram_client.run(blocking=False)
+        LOGGER.info(f"Plugin {pligin_name} is running")
 
-
-Jarvis.registered_plugins.append(JarvisOutputBot)
+# Jarvis.registered_plugins.append(JarvisOutputBot)
+# this doesn't work :( Probably because of cache
