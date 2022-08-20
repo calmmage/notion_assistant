@@ -4,7 +4,7 @@
 
 from typing import List, Optional
 
-from notion_assistant.jarvis import config
+from notion_assistant.jarvis.config import jarvis_input_bot_config
 from notion_assistant.jarvis.enhanced_notion_client import NotionDB
 from notion_assistant.jarvis.jarvis import Jarvis
 from notion_assistant.jarvis.telegram_client import TelegramClient
@@ -56,10 +56,10 @@ class JarvisInputBot:
         self.jarvis = jarvis
         self.notion_client = jarvis.notion_client
 
-        self.db_todos = self.notion_client.get_db(config.db_todos)
+        self.db_todos = self.notion_client.get_db(jarvis_input_bot_config.db_todos)
 
         # init telegram client
-        self.telegram_client = TelegramClient(config.telegram_input_token)
+        self.telegram_client = TelegramClient(jarvis_input_bot_config.telegram_token)
 
     @generator(commands=['add'])
     def add_item(self, name, tags, content=None, target_db: Optional[NotionDB] = None,
@@ -139,9 +139,8 @@ class JarvisInputBot:
 
         for generator_command, func_name in generator.registry.items():
             func = self.__getattribute__(func_name)
-            func = parse_telegram_command_decorator(
-                func)
-            self.telegram_client.add_handler(generator_command, func)
+            func = parse_telegram_command_decorator(func)
+            self.telegram_client.add_command_handler(generator_command, func)
             LOGGER.info(f"Added handler <{func}> for command <{generator_command}> in plugin {pligin_name}")
 
         # todo p1: Add general text handler. Convert messages to commands and process accordingly
@@ -152,5 +151,4 @@ class JarvisInputBot:
         self.telegram_client.run(blocking=False)
         LOGGER.info(f"Plugin {pligin_name} is running")
 
-
-Jarvis.registered_plugins.append(JarvisInputBot)
+# Jarvis.registered_plugins.append(JarvisInputBot)
