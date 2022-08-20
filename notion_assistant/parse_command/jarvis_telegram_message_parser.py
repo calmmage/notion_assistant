@@ -14,7 +14,7 @@ def telegram_command_to_text(func):
     return _get_text_and_apply
 
 
-def notion_decorator(func):
+def parse_telegram_command_decorator(func):
     @functools.wraps(func)
     def new_func(upd: Update, context: CallbackContext) -> None:
         parts = parse_command(upd.message.text)
