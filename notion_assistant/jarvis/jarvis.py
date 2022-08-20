@@ -5,8 +5,8 @@ from notion_assistant.jarvis.enhanced_notion_client import EnhancedNotionClient
 from notion_assistant.logs import LOGGER
 
 
-class JarvisPlugin:
-    pass
+# class JarvisPlugin:
+#     pass
 
 
 class Jarvis:
