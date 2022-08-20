@@ -34,7 +34,6 @@ jarvis_input_bot_config = JarvisPluginConfig(
     enabled=True
 )
 jarvis_input_bot_config.telegram_token = env("JARVIS_TELEGRAM_INPUT_TOKEN")
-print("", )
 jarvis_input_bot_config.db_todos = env("JARVIS_DB_TODOS")
 jarvis_input_bot_config.db_notes = env("JARVIS_DB_NOTES")
 jarvis_input_bot_config.db_bookmarks = env("JARVIS_DB_BOOKMARKS")
