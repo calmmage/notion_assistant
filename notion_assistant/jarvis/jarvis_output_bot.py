@@ -1,7 +1,6 @@
 # jarvis output bot
 from typing import List
 
-from notion_assistant.jarvis.config import jarvis_output_bot_config
 # example: links for quick access relevant at this time of day (e.g. Siri)
 # auto-cleanup all other clutter messages
 from notion_assistant.jarvis.telegram_client import TelegramClient
@@ -33,6 +32,7 @@ class JarvisOutputBot:
         # init config values: telegram token etc.
 
         self.jarvis = jarvis
+        jarvis_output_bot_config = jarvis.config.plugins['JarvisOutputBot']
         self.notion_client = jarvis.notion_client
 
         self.telegram_client = TelegramClient(jarvis_output_bot_config.telegram_token)

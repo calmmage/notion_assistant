@@ -4,7 +4,6 @@
 
 from typing import List, Optional
 
-from notion_assistant.jarvis.config import jarvis_input_bot_config
 from notion_assistant.jarvis.enhanced_notion_client import NotionDB
 from notion_assistant.jarvis.jarvis import Jarvis
 from notion_assistant.jarvis.telegram_client import TelegramClient
@@ -54,6 +53,7 @@ class JarvisInputBot:
         # init config values: telegram token etc.
 
         self.jarvis = jarvis
+        jarvis_input_bot_config = jarvis.config.plugins['JarvisInputBot']
         self.notion_client = jarvis.notion_client
 
         self.db_todos = self.notion_client.get_db(jarvis_input_bot_config.db_todos)

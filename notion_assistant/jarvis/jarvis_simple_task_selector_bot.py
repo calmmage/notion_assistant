@@ -1,4 +1,3 @@
-from notion_assistant.jarvis.config import jarvis_simple_task_selector_bot_config
 from notion_assistant.jarvis.telegram_client import TelegramClient
 from notion_assistant.logs import LOGGER
 
@@ -6,6 +5,7 @@ from notion_assistant.logs import LOGGER
 class JarvisSimpleTaskSelectorBot:
     def __init__(self, jarvis):
         self.jarvis = jarvis
+        jarvis_simple_task_selector_bot_config = jarvis.config.plugins['JarvisSimpleTaskSelectorBot']
         self.notion_client = jarvis.notion_client
 
         self.telegram_client = TelegramClient(jarvis_simple_task_selector_bot_config.telegram_token)
