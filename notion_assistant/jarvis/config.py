@@ -1,5 +1,6 @@
+from copy import deepcopy
 from dataclasses import dataclass
-from typing import List
+from typing import List, Dict
 
 from defaultenv import env
 
@@ -9,19 +10,35 @@ class JarvisPluginConfig:
     name: str
     enabled: bool
 
+    def __deepcopy__(self, memo):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            setattr(result, k, deepcopy(v, memo))
+        return result
+
 
 # Jarvis
 @dataclass
 class JarvisConfig:
-    plugins: List[JarvisPluginConfig]
+    plugins: Dict[str, JarvisPluginConfig]
     notion_token: str
     db_logs: str
     db_structured_logs: str
     jarvis_env: str
 
+    def __deepcopy__(self, memo):
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            setattr(result, k, deepcopy(v, memo))
+        return result
+
 
 jarvis_config = JarvisConfig(
-    plugins=[],
+    plugins=dict(),
     notion_token=env("JARVIS_NOTION_TOKEN"),
     db_logs=env("JARVIS_SIMPLE_LOG_TABLE"),
     db_structured_logs=env("JARVIS_STUCTURED_LOG_TABLE"),
@@ -29,40 +46,36 @@ jarvis_config = JarvisConfig(
 )
 
 # Jarvis Input Bot
-jarvis_input_bot_config = JarvisPluginConfig(
+plugin = JarvisPluginConfig(
     name='JarvisInputBot',
     enabled=True
 )
-jarvis_input_bot_config.telegram_token = env("JARVIS_TELEGRAM_INPUT_TOKEN")
-jarvis_input_bot_config.db_todos = env("JARVIS_DB_TODOS")
-jarvis_input_bot_config.db_notes = env("JARVIS_DB_NOTES")
-jarvis_input_bot_config.db_bookmarks = env("JARVIS_DB_BOOKMARKS")
-
-jarvis_config.plugins.append(jarvis_input_bot_config)
+plugin.telegram_token = env("JARVIS_TELEGRAM_INPUT_TOKEN")
+plugin.db_todos = env("JARVIS_DB_TODOS")
+plugin.db_notes = env("JARVIS_DB_NOTES")
+plugin.db_bookmarks = env("JARVIS_DB_BOOKMARKS")
+jarvis_config.plugins[plugin.name] = plugin
 
 # Jarvis Output Bot
-jarvis_output_bot_config = JarvisPluginConfig(
+plugin = JarvisPluginConfig(
     name='JarvisOutputBot',
     enabled=True
 )
-jarvis_output_bot_config.telegram_token = env("JARVIS_TELEGRAM_TOKEN")
-
-jarvis_config.plugins.append(jarvis_output_bot_config)
+plugin.telegram_token = env("JARVIS_TELEGRAM_TOKEN")
+jarvis_config.plugins[plugin.name] = plugin
 
 # Simple task Selector
-jarvis_simple_task_selector_bot_config = JarvisPluginConfig(
+plugins = JarvisPluginConfig(
     name='JarvisSimpleTaskSelectorBot',
     enabled=False
 )
-jarvis_simple_task_selector_bot_config.telegram_token = env("JARVIS_TELEGRAM_STS_TOKEN")
-
-jarvis_config.plugins.append(jarvis_simple_task_selector_bot_config)
+plugins.telegram_token = env("JARVIS_TELEGRAM_STS_TOKEN")
+jarvis_config.plugins[plugin.name] = plugin
 
 # Simple task repeater
-jarvis_simple_task_repeater_bot_config = JarvisPluginConfig(
-    name='JarvisInputBot',
+plugin = JarvisPluginConfig(
+    name='SimpleTaskRepeater',
     enabled=False
 )
-jarvis_simple_task_repeater_bot_config.db_str = env("JARVIS_DB_STR")
-
-jarvis_config.plugins.append(jarvis_simple_task_repeater_bot_config)
+plugin.db_str = env("JARVIS_DB_STR")
+jarvis_config.plugins[plugin.name] = plugin

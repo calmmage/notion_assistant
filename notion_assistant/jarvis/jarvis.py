@@ -5,6 +5,7 @@ from notion_assistant.jarvis.enhanced_notion_client import EnhancedNotionClient
 from notion_assistant.logs import LOGGER
 
 
+from copy import deepcopy
 # class JarvisPlugin:
 #     pass
 
@@ -12,7 +13,9 @@ from notion_assistant.logs import LOGGER
 class Jarvis:
     registered_plugins = []
 
-    def __init__(self):
+    def __init__(self, **kwargs):
+        self.config = deepcopy(jarvis_config)
+        self.config.__dict__.update(**kwargs)  # todo: figure out a better way to update config / turn on and off the plugins
         # connect to Notion
         self.notion_client = EnhancedNotionClient(jarvis_config.notion_token)
         self.launched = False
