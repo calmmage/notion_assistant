@@ -4,11 +4,15 @@ from notion_assistant.jarvis.config import jarvis_config
 from notion_assistant.jarvis.enhanced_notion_client import EnhancedNotionClient
 from notion_assistant.logs import LOGGER
 
+import threading
 
+import json
 from copy import deepcopy
+from pathlib import Path
 # class JarvisPlugin:
 #     pass
 
+registered_users_path = Path("./registered_jarvis_users.json")
 
 class Jarvis:
     registered_plugins = []
@@ -19,6 +23,12 @@ class Jarvis:
         # connect to Notion
         self.notion_client = EnhancedNotionClient(jarvis_config.notion_token)
         self.launched = False
+
+        if registered_users_path.exists():
+            registered_users = json.load(registered_users_path.open('r'))
+        else:
+            registered_users = {}  # Dict[str,str]: User -> ChatId
+        self.registered_users = registered_users
 
     def run(self):
         LOGGER.info(f"Launching {self.__class__.__name__}")
@@ -44,6 +54,11 @@ class Jarvis:
         self.launched = True
         while self.launched:
             sleep(1)
+
+    def run_async(self):
+        t = threading.Thread(target=self.run)
+        t.run()
+        return t
 
 
 if __name__ == '__main__':

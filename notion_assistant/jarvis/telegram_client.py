@@ -10,6 +10,11 @@ def start(update: Update, context: CallbackContext) -> None:
         reply_markup=ForceReply(selective=True),
     )
 
+    # save user to the registered users
+# {'ok': True, 'result': [{'update_id': 671653029, 'message': {'message_id': 21, 'from': {'id': 291560340,
+# 'is_bot': False, 'first_name': 'Petr', 'last_name': 'Lavrov', 'username': 'petr_lavrov', 'language_code': 'en',
+# 'is_premium': True}, 'chat': {'id': 291560340, 'first_name': 'Petr', 'last_name': 'Lavrov', 'username':
+# 'petr_lavrov', 'type': 'private'}, 'date': 1663277944, 'text': 'test'}}]}
 
 def help_command(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /help is issued."""

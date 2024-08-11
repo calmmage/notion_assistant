@@ -2,8 +2,13 @@ import logging
 
 import notion_client
 
+__notion_client_cache = dict()
 
-# from functools import cached_property
+
+def get_notion_client(token):
+    if token not in __notion_client_cache:
+        __notion_client_cache[token] = EnhancedNotionClient(token)
+    return __notion_client_cache[token]
 
 
 class EnhancedNotionClient:  # todo: make a factory, forbid duplication
